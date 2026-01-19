@@ -1,0 +1,12 @@
+{
+  "name": "nexushook",
+  "version": "1.0.0",
+  "description": "O NexusHook é uma infraestrutura de mensageria assíncrona baseada no modelo Webhook-as-a-Service",
+  "license": "ISC",
+  "author": "Rafael Maia da Fonseca",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
