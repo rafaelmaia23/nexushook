@@ -1,0 +1,12 @@
+import dotenv from 'dotenv';
+import { app } from '@/app';
+
+dotenv.config({
+  path: '.env.development',
+});
+
+const PORT = Number(process.env.PORT) || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

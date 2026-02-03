@@ -7,14 +7,12 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "npm run services:up && tsx watch src/server.ts",
+    "dev": "npm run services:up && trap 'npm run services:stop' INT TERM HUP EXIT && tsx watch src/server.ts",
     "build": "tsup src/server.ts --format cjs,esm --clean --dts",
     "start": "node dist/server.js",
-
     "services:up": "docker compose up -d",
     "services:stop": "docker compose stop",
     "services:down": "docker compose down",
-
     "lint:check": "npm run lint:eslint:check && npm run lint:prettier:check",
     "lint:fix": "npm run lint:eslint:fix && npm run lint:prettier:fix",
     "lint:eslint:check": "eslint .",
@@ -23,6 +21,9 @@
     "lint:prettier:fix": "prettier --write ."
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/node": "^25.0.9",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
@@ -33,5 +34,10 @@
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
   }
 }
