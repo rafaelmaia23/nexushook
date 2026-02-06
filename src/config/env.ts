@@ -20,6 +20,10 @@ const envSchema = z.object({
 
   REDIS_HOST: z.string(),
   REDIS_PORT: z.coerce.number().int().positive(),
+
+  LOGGER_LEVEL: z
+    .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
+    .default('info'),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
