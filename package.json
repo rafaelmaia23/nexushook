@@ -7,14 +7,14 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "npm run services:up && trap 'npm run services:stop' INT TERM HUP EXIT && tsx watch src/server.ts",
+    "dev": "tsx scripts/dev.ts",
     "build": "tsup src/server.ts --format cjs,esm --clean --dts",
     "start": "node dist/server.js",
     "services:up": "docker compose up -d",
     "services:stop": "docker compose stop",
     "services:down": "docker compose down",
-    "prisma:migrate": "npx prisma migrate dev --env-file .env.development",
-    "prisma:generate": "npx prisma generate --env-file .env.development",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:generate": "npx prisma generate",
     "lint:check": "npm run lint:eslint:check && npm run lint:prettier:check",
     "lint:fix": "npm run lint:eslint:fix && npm run lint:prettier:fix",
     "lint:eslint:check": "eslint .",
@@ -45,6 +45,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "pg": "^8.18.0"
+    "pg": "^8.18.0",
+    "redis": "^5.10.0"
   }
 }
