@@ -1,9 +1,15 @@
-import dotenv from 'dotenv';
 import { spawn } from 'node:child_process';
+import { env } from '../src/config/env';
 import { waitForPostgres } from './wait-for-postgres';
 import { waitForRedis } from './wait-for-redis';
 
-dotenv.config({ path: '.env.development' });
+const POSTGRES_URL =
+  `postgresql://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}` +
+  `@${env.POSTGRES_HOST}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`;
+
+const REDIS_URL = `redis://${env.REDIS_HOST}:${env.REDIS_PORT}`;
+
+// CONTROLE DE PROCESSO
 
 let shuttingDown = false;
 let serverProcess: ReturnType<typeof spawn> | null = null;
@@ -25,6 +31,8 @@ function run(command: string, args: string[]) {
     shell: process.platform === 'win32',
   });
 }
+
+// SHUTDOWN GRACEFUL
 
 async function shutdown(signal: string) {
   if (shuttingDown) return;
@@ -69,17 +77,17 @@ process.on('unhandledRejection', async (reason) => {
   await shutdown('unhandledRejection');
 });
 
-async function main() {
-  if (!process.env.POSTGRES_URL || !process.env.REDIS_URL) {
-    console.error('❌ POSTGRES_URL ou REDIS_URL não definidos');
-    process.exit(1);
-  }
+// BOOTSTRAP PRINCIPAL
 
+async function main() {
   console.log('📦 Subindo containers...');
   await execute('npm', ['run', 'services:up']);
 
-  await waitForPostgres({ connectionString: process.env.POSTGRES_URL });
-  await waitForRedis({ connectionString: process.env.REDIS_URL });
+  console.log('⏳ Aguardando PostgreSQL...');
+  await waitForPostgres({ connectionString: POSTGRES_URL });
+
+  console.log('⏳ Aguardando Redis...');
+  await waitForRedis({ connectionString: REDIS_URL });
 
   console.log('🔄 Rodando migrações...');
   const migrationCode = await execute('npm', ['run', 'prisma:migrate']);

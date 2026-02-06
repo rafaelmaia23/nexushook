@@ -1,12 +1,8 @@
-import dotenv from 'dotenv';
 import { app } from '@/app';
 import type { Server } from 'http';
+import { config } from '@/config/config';
 
-dotenv.config({
-  path: process.env.NODE_ENV === 'production' ? '.env' : '.env.development',
-});
-
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = config.app.port;
 
 let server: Server;
 

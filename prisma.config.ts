@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
+import { config } from './src/config/config';
 import { defineConfig } from 'prisma/config';
-
-dotenv.config({ path: '.env.development' });
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
@@ -9,6 +7,6 @@ export default defineConfig({
     path: 'prisma/migrations',
   },
   datasource: {
-    url: process.env['POSTGRES_URL'],
+    url: config.database.url,
   },
 });
