@@ -1,6 +1,7 @@
 import { app } from '@/app';
 import type { Server } from 'http';
 import { config } from '@/config/config';
+import { logger } from './logger/logger';
 
 const PORT = config.app.port;
 
@@ -8,7 +9,7 @@ let server: Server;
 
 function startServer() {
   server = app.listen(PORT, () => {
-    console.log(`🚀 Server rodando em http://localhost:${PORT}`);
+    logger.info(`🚀 Server rodando em http://localhost:${PORT}`);
   });
 }
 
@@ -18,14 +19,14 @@ async function shutdown(signal: string) {
   if (isShuttingDown) return;
   isShuttingDown = true;
 
-  console.log(`\n🛑 Encerrando servidor (${signal})...`);
+  logger.info(`\n🛑 Encerrando servidor (${signal})...`);
 
   await new Promise<void>((resolve) => {
     server.close((err) => {
       if (err) {
-        console.error('❌ Erro ao fechar servidor HTTP:', err);
+        logger.error(err, '❌ Erro ao fechar servidor HTTP:');
       } else {
-        console.log('✅ Servidor HTTP fechado');
+        logger.info('✅ Servidor HTTP fechado');
       }
       resolve();
     });
@@ -39,12 +40,12 @@ async function shutdown(signal: string) {
 });
 
 process.on('uncaughtException', async (err) => {
-  console.error('💥 uncaughtException:', err);
+  logger.error(err, '💥 uncaughtException:');
   await shutdown('uncaughtException');
 });
 
 process.on('unhandledRejection', async (reason) => {
-  console.error('💥 unhandledRejection:', reason);
+  logger.error(reason, '💥 unhandledRejection:');
   await shutdown('unhandledRejection');
 });
 

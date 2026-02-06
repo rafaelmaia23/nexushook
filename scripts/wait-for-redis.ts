@@ -1,4 +1,5 @@
 import { createClient } from 'redis';
+import { logger } from '../src/logger/logger';
 
 export interface RedisOptions {
   connectionString: string;
@@ -13,7 +14,7 @@ export async function waitForRedis({
 }: RedisOptions) {
   const start = Date.now();
 
-  process.stdout.write('🟡 Aguardando Redis');
+  logger.info('⏳ Aguardando Redis...');
 
   while (true) {
     const client = createClient({ url: connectionString });
@@ -24,22 +25,20 @@ export async function waitForRedis({
     try {
       await client.connect();
       await client.ping();
-      await client.disconnect();
+      await client.destroy();
 
-      console.log('\n🟢 Redis pronto');
+      logger.info('🟢 Redis pronto');
       return;
     } catch {
       // Tenta desconectar para limpar handles pendentes
       try {
-        await client.disconnect();
+        await client.destroy();
       } catch {
         // Ignora erro se já estiver desconectado
       }
 
-      process.stdout.write('.');
-
       if (Date.now() - start > timeoutMs) {
-        throw new Error('\n❌ Timeout aguardando Redis');
+        logger.error('\n❌ Timeout aguardando Redis');
       }
 
       await new Promise((r) => setTimeout(r, intervalMs));
