@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { httpLogger } from './logger/http-logger';
+import { httpLogger } from './core/logger/http-logger';
 
 export const app = express();
 
