@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import { z } from 'zod';
-import { logger } from '@/core/logger/logger';
 
 const appEnv = process.env.APP_ENV ?? 'development';
 
@@ -25,14 +24,17 @@ const envSchema = z.object({
   LOGGER_LEVEL: z
     .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
     .default('info'),
+
+  BCRYPT_SALT_ROUNDS: z.coerce.number().int().positive().default(14),
+  BCRYPT_PEPPER: z.string().default('some_random_pepper_value'),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {
-  logger.error(
-    z.treeifyError(parsedEnv.error),
+  console.error(
     '❌ Invalid environment variables:',
+    z.treeifyError(parsedEnv.error),
   );
   process.exit(1);
 }

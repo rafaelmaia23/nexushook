@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import { logger } from '../src/logger/logger';
+import { logger } from '../src/shared/logger/logger';
 
 export interface PostgresOptions {
   connectionString: string;

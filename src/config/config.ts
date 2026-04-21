@@ -26,4 +26,9 @@ export const config = {
   logger: {
     level: env.LOGGER_LEVEL,
   },
+
+  password: {
+    saltRounds: env.BCRYPT_SALT_ROUNDS,
+    pepper: env.BCRYPT_PEPPER,
+  },
 };

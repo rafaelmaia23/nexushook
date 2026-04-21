@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { httpLogger } from './core/logger/http.logger';
-import { errorHandler } from '@/core/middlewares/error.middleware';
+import { httpLogger } from '@/shared/logger/http.logger';
+import { errorHandler } from '@/shared/middlewares/error.middleware';
+import router from '@/app/routes';
 
 export const app = express();
 
@@ -15,6 +16,8 @@ app.use(
 app.use(express.json());
 
 app.use(httpLogger);
+
+app.use('/api', router);
 
 app.use(errorHandler);
 

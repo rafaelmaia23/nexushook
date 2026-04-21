@@ -1,4 +1,4 @@
-import { AppError } from '@/core/errors/AppError';
+import { AppError } from '@/shared/errors/AppError';
 
 export type SerializedErrorCause =
   | {

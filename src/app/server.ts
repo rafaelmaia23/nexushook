@@ -1,7 +1,7 @@
-import { app } from '@/app';
+import { app } from '@/app/app';
 import type { Server } from 'http';
 import { config } from '@/config/config';
-import { logger } from './core/logger/logger';
+import { logger } from '@/shared/logger/logger';
 
 const PORT = config.app.port;
 

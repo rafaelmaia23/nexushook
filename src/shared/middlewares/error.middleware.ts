@@ -1,18 +1,10 @@
-import { logger } from '@/core/logger/logger';
-import type { NextFunction, Request, Response } from 'express';
-import { AppError } from '@/core/errors/AppError';
-import { InternalServerError } from '@/core/errors/InternalServerError';
-import {
-  extractCause,
-  type SerializedErrorCause,
-} from '../logger/extractErrorCause';
+import { logger } from '@/shared/logger/logger';
+import type { Request, Response } from 'express';
+import { AppError } from '@/shared/errors/AppError';
+import { InternalServerError } from '@/shared/errors/InternalServerError';
+import { extractCause } from '../logger/extractErrorCause';
 
-export function errorHandler(
-  err: unknown,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export function errorHandler(err: unknown, req: Request, res: Response) {
   const appError = err instanceof AppError ? err : new InternalServerError(err);
 
   if (appError.statusCode >= 500) {

@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import { env } from '../src/config/env';
 import { waitForPostgres } from './wait-for-postgres';
 import { waitForRedis } from './wait-for-redis';
-import { logger } from '../src/logger/logger';
+import { logger } from '../src/shared/logger/logger';
 
 const POSTGRES_URL =
   `postgresql://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}` +
@@ -97,7 +97,7 @@ async function main() {
   }
 
   logger.info('🚀 Iniciando servidor...');
-  serverProcess = run('npx', ['tsx', 'watch', 'src/server.ts']);
+  serverProcess = run('npx', ['tsx', 'watch', 'src/app/server.ts']);
 
   serverProcess.on('exit', (code: number | null) => {
     if (!shuttingDown) {
